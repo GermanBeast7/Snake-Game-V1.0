@@ -14,7 +14,7 @@ struct Coordinates{
 }
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -23,12 +23,12 @@ class ViewController: UIViewController {
     enum Direction{
         case up,down,left,right
     }
-
+    
     class Snake{
-       
+        
         var isAlive:Bool = true
         var length:UInt = 3
-        
+        var oldBodyCoords: Coordinates
         var direction: Direction
         var speed:Int
         var bodyCoordinates: [Coordinates]
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
             self.speed = speed
             foodCordinate = Coordinates(x: 0, y: 0)
             bodyCoordinates = [Coordinates(x: 0, y: 0)]
-           
+            oldBodyCoords = Coordinates(x: 0, y: 0)
         }
         
         func move(body: inout [Coordinates])-> [Coordinates]{   //needs to remove end and shift all the other body parts accordingly
@@ -53,20 +53,22 @@ class ViewController: UIViewController {
             }else if direction==Direction.down{
                 if headPoint.y != 1 {
                     headPoint.y-=1
-
+                    
                 }
-
+                
             }else if direction==Direction.right{
                 if headPoint.x != 20{
                     headPoint.x+=1
-
+                    
                 }
-
+                
             }else {
                 if headPoint.x != 1{
                     headPoint.x-=1
-
+                    
                 }
+                bodyCoordinates.insert(headPoint, at: 0)
+                oldBodyCoords = bodyCoordinates.removeLast()
                 
             }
             return body
@@ -82,20 +84,14 @@ class ViewController: UIViewController {
             
         }
         func foodAte(){
-            
             length+=1
-            
             genFood()
-            
-            
-            //add new body coordinate at correct position
-            
-            
+            bodyCoordinates.insert(oldBodyCoords, at: bodyCoordinates.endIndex)
         }
         func genFood(){
             var x: UInt32 = 0
             var y: UInt32 = 0
-           
+            
             var canGen: Bool = false
             
             while canGen != true   {
@@ -112,17 +108,23 @@ class ViewController: UIViewController {
                         
                     }
                 }
-              
+                
                 
             }
             
         }
         
         func changeDirection(_ newDirection: Direction)  {
-            self.direction = newDirection
-            
-            
-            
+            if (direction == Direction.down || direction == Direction.up) && (newDirection == Direction.down || newDirection == Direction.up){
+                
+        
+            }
+            else if (direction == Direction.left || direction == Direction.right) && (newDirection == Direction.left || newDirection == Direction.right){
+                
+            }
+            else{
+                direction = newDirection
+            }
             
         }
         
@@ -141,7 +143,7 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
 }
 

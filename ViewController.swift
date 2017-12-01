@@ -5,7 +5,7 @@
 //  Created by Matt T on 2017-11-23.
 //  Copyright © 2017 Matthew Temniuk. All rights reserved.
 //
-
+// 0 to 21, 76 in totoal
 import UIKit
 
 struct Coordinates{
@@ -33,7 +33,8 @@ class ViewController: UIViewController {
         var speed:Int
         var bodyCoordinates: [Coordinates]
         var foodCordinate: Coordinates
-        
+        var wallSnake: [Coordinates]
+        var score = 0
         
         init(speed:Int) {
             
@@ -42,6 +43,7 @@ class ViewController: UIViewController {
             foodCordinate = Coordinates(x: 0, y: 0)
             bodyCoordinates = [Coordinates(x: 0, y: 0)]
             oldBodyCoords = Coordinates(x: 0, y: 0)
+            wallSnake = [Coordinates(x: 0, y: 0)]
         }
         
         func move(body: inout [Coordinates])-> [Coordinates]{   //needs to remove end and shift all the other body parts accordingly
@@ -62,13 +64,15 @@ class ViewController: UIViewController {
                     
                 }
                 
+                
             }else {
                 if headPoint.x != 1{
                     headPoint.x-=1
                     
                 }
-                bodyCoordinates.insert(headPoint, at: 0)
                 oldBodyCoords = bodyCoordinates.removeLast()
+                bodyCoordinates.insert(headPoint, at: 0)
+                
                 
             }
             return body
@@ -137,7 +141,29 @@ class ViewController: UIViewController {
             }
             return false
         }
-        
+        func generateWallSnake(){
+            var wallSnake = [Coordinates](repeating: Coordinates(x: 0, y: 0), count: 75)
+            for z in 0...18{
+                var n = 0
+                wallSnake[z] = Coordinates(x: UInt32(21), y: UInt32(n))
+                n += 1
+            }
+            for z in 19...37{
+                var n = 0
+                wallSnake[z] = Coordinates(x: UInt32(0), y: UInt32(n))
+                n += 1
+            }
+            for z in 38...56{
+                var n = 0
+                wallSnake[z] = Coordinates(x: UInt32(n), y: UInt32(0))
+                n += 1
+            }
+            for z in 57...75{
+                var n = 0
+                wallSnake[z] = Coordinates(x: UInt32(n), y: UInt32(21))
+                n += 1
+            }
+        }
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

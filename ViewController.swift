@@ -35,6 +35,7 @@ class ViewController: UIViewController {
         var foodCordinate: Coordinates
         var wallSnake: [Coordinates]
         var score = 0
+        var timer:Timer?
         
         init(speed:Int) {
             
@@ -164,6 +165,32 @@ class ViewController: UIViewController {
                 n += 1
             }
         }
+        
+        func startGame() {
+            if (self.timer != nil) {
+                return
+            }
+            
+            genFood()
+            self.timer = Timer.scheduledTimer(timeInterval: speed, target: self, selector: #selector(timerMethod(_:)), userInfo: nil, repeats: true)
+            
+        }
+        func timerMethod(_ timer:Timer?) {
+            self.move()
+            let headHitBody = self.headHitBody()
+            if headHitBody == true {
+                self.endGame()
+                return
+            }
+            
+            let head = self.bodyCoordinates[0]
+            if head.x == self.foodCordinate.x && head.y == self.foodCordinate?.y {
+                self.genfood()
+            }
+            
+            
+        }
+
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

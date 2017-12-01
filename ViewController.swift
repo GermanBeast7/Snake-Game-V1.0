@@ -20,6 +20,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
     
+    
     enum Direction{
         case up,down,left,right
     }
@@ -30,14 +31,14 @@ class ViewController: UIViewController {
         var length:UInt = 3
         var oldBodyCoords: Coordinates
         var direction: Direction
-        var speed:Int
+        var speed:Double
         var bodyCoordinates: [Coordinates]
         var foodCordinate: Coordinates
         var wallSnake: [Coordinates]
         var score = 0
         var timer:Timer?
         
-        init(speed:Int) {
+        init(speed:Double) {
             
             direction = Direction.up
             self.speed = speed
@@ -47,7 +48,7 @@ class ViewController: UIViewController {
             wallSnake = [Coordinates(x: 0, y: 0)]
         }
         
-        func move(body: inout [Coordinates])-> [Coordinates]{   //needs to remove end and shift all the other body parts accordingly
+        func move() {
             var headPoint = bodyCoordinates[0]
             if direction==Direction.up{
                 if headPoint.y != 20{
@@ -76,7 +77,7 @@ class ViewController: UIViewController {
                 
                 
             }
-            return body
+            
         }
         
         func spawn(){
@@ -122,7 +123,7 @@ class ViewController: UIViewController {
         func changeDirection(_ newDirection: Direction)  {
             if (direction == Direction.down || direction == Direction.up) && (newDirection == Direction.down || newDirection == Direction.up){
                 
-        
+                
             }
             else if (direction == Direction.left || direction == Direction.right) && (newDirection == Direction.left || newDirection == Direction.right){
                 
@@ -172,25 +173,26 @@ class ViewController: UIViewController {
             }
             
             genFood()
-            self.timer = Timer.scheduledTimer(timeInterval: speed, target: self, selector: #selector(timerMethod(_:)), userInfo: nil, repeats: true)
+            self.timer = Timer.scheduledTimer(timeInterval: speed, target: self, selector: #selector(self.timerMethod(_:)) , userInfo: nil, repeats: true)
             
         }
-        func timerMethod(_ timer:Timer?) {
-            self.move()
+        @objc func timerMethod(_ timer:Timer?) {
+            move()
             let headHitBody = self.headHitBody()
             if headHitBody == true {
-                self.endGame()
+              //  self.endGame()
                 return
             }
             
             let head = self.bodyCoordinates[0]
-            if head.x == self.foodCordinate.x && head.y == self.foodCordinate?.y {
-                self.genfood()
+            if head.x == self.foodCordinate.x && head.y == self.foodCordinate.y {
+                self.genFood()
             }
             
+        
             
         }
-
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -199,4 +201,3 @@ class ViewController: UIViewController {
     
     
 }
-

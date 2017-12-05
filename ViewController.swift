@@ -5,8 +5,9 @@
 //  Created by Matt T on 2017-11-23.
 //  Copyright © 2017 Matthew Temniuk. All rights reserved.
 //
-// 0 to 21, 76 in totoal
+//
 import UIKit
+import Foundation
 
 struct Coordinates{
     var x: UInt32
@@ -138,11 +139,24 @@ class ViewController: UIViewController {
             let headPoint = bodyCoordinates[0]
             for bodyPoint in bodyCoordinates[1..<bodyCoordinates.count]   {
                 if bodyPoint.x == headPoint.x && bodyPoint.y == headPoint.y {
+                    isAlive = false
                     return true
                 }
             }
             return false
         }
+        
+        func headHitWall() -> Bool{
+            let headPoint = bodyCoordinates[0]
+            for wallPoint in wallSnake[1..<wallSnake.count]   {
+                if wallPoint.x == headPoint.x && wallPoint.y == headPoint.y {
+                    isAlive = false
+                    return true
+                }
+            }
+            return false
+        }
+        
         func generateWallSnake(){
             var wallSnake = [Coordinates](repeating: Coordinates(x: 0, y: 0), count: 75)
             for z in 0...18{
@@ -176,11 +190,21 @@ class ViewController: UIViewController {
             self.timer = Timer.scheduledTimer(timeInterval: speed, target: self, selector: #selector(self.timerMethod(_:)) , userInfo: nil, repeats: true)
             
         }
+        
+        func endGame() {
+            timer!.invalidate()
+            timer = nil
+            
+            //retryButton.isHidden = false
+            
+        }
+        
+        
         @objc func timerMethod(_ timer:Timer?) {
             move()
             let headHitBody = self.headHitBody()
             if headHitBody == true {
-              //  self.endGame()
+                endGame() 
                 return
             }
             
@@ -189,7 +213,7 @@ class ViewController: UIViewController {
                 self.genFood()
             }
             
-        
+            
             
         }
         

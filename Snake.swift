@@ -53,7 +53,7 @@ class Snake{
             
             headPoint.y+=1
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear, animations: {
-                Image.center.y -= 15
+                Image.center.y -= 32
             }, completion: nil)
             
             
@@ -61,7 +61,7 @@ class Snake{
             
             headPoint.y-=1
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear, animations: {
-                Image.center.y += 15
+                Image.center.y += 32
             }, completion: nil)
             
             
@@ -69,7 +69,7 @@ class Snake{
             
             headPoint.x+=1
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear, animations: {
-                Image.center.x += 15
+                Image.center.x += 32
             }, completion: nil)
             
             
@@ -78,7 +78,7 @@ class Snake{
             
             headPoint.x-=1
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear, animations: {
-                Image.center.x -= 15
+                Image.center.x -= 32
             }, completion: nil)
         }
         oldBodyCoords = bodyCoordinates.removeLast()
@@ -90,36 +90,39 @@ class Snake{
     }
     
     func spawn(){
-        bodyCoordinates[0].x = 7
-        bodyCoordinates[0].y = 10
-        bodyCoordinates[1].x = bodyCoordinates[0].x
-        bodyCoordinates[1].y = bodyCoordinates[0].y-1
-        bodyCoordinates[2].x = bodyCoordinates[1].x
-        bodyCoordinates[2].y = bodyCoordinates[1].y-1
+
+        bodyCoordinates.removeAll()
+        let cord1 = Coordinates(x: 7, y: 10)
+        let cord2 = Coordinates(x: 7, y: 9)
+        let cord3 = Coordinates(x: 7, y: 8)
+        bodyCoordinates.insert(cord1, at: 0)
+        bodyCoordinates.insert(cord2, at: 1)
+        bodyCoordinates.insert(cord3, at: 2)
         
     }
-    func foodAte(Image: UIView){
+    func foodAte(Image: UIView, start: UIView){
         length+=1
-        genFood(Image: Image)
+        genFood(Image: Image, start:start)
         bodyCoordinates.insert(oldBodyCoords, at: bodyCoordinates.endIndex)
         score+=100
     }
-    func genFood(Image: UIView){
+    func genFood(Image: UIView,start: UIView){
         var x: Int = 0
         var y: Int = 0
-        
+        let startX = Int(start.center.x)
+        let startY = Int(start.center.y)
         var canGen: Bool = false
-        
+        Image.isHidden = false
         while canGen != true   {
-            x = Int(arc4random_uniform(20)) + 1
-            y = Int(arc4random_uniform(20)) + 1
+            x = Int(arc4random_uniform(20))
+            y = Int(arc4random_uniform(20))
             for index in bodyCoordinates[0..<bodyCoordinates.count]    {
                 if x != index.x  &&  y != index.y {
                     canGen = true
                     foodCordinate.x = Int(x)
-                    Image.center.x = CGFloat(36 + 15*x)
+                    Image.center.x = CGFloat(startX + 32*(x-1))
                     foodCordinate.y = Int(y)
-                    Image.center.y = CGFloat(376 - 25*y)
+                    Image.center.y = CGFloat(startY - 32*(y-1))
                 } else{
                     
                     canGen = false
@@ -159,10 +162,10 @@ class Snake{
     
     func headHitWall(Image: UIView) -> Bool{
         
-        if Image.center.x <= 36 || Image.center.x >= 345 {
+        if Image.center.x < 64 || Image.center.x > 702 {
             return true
         }
-        if Image.center.y <= 66 || Image.center.y >= 376 {
+        if Image.center.y < 92 || Image.center.y > 732 {
             return true
         }
         return false
@@ -199,7 +202,7 @@ class Snake{
             n += 1
         }
     }
-    
+        
     
    
     

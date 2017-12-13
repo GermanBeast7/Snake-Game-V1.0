@@ -23,12 +23,20 @@ class ViewController: UIViewController {
     
     
     
+    @IBOutlet weak var score: UILabel!
     @IBOutlet weak var food: UIImageView!
     @IBOutlet weak var snakeHead: UIImageView!
+    @IBOutlet weak var startPosition: UIImageView!
+   
+    @IBOutlet weak var foodStart: UIImageView!
+    
  var timer:Timer?
     
     var snake = Snake(speed: 0.25)
+    
    
+ 
+    
     
     
     @objc func timerMethod(_ timer:Timer?) {
@@ -46,7 +54,10 @@ class ViewController: UIViewController {
         
         let head = snake.bodyCoordinates[0]
         if head.x == snake.foodCordinate.x && head.y == snake.foodCordinate.y {
-            snake.genFood(Image: food)
+            snake.genFood(Image: food,start: foodStart)
+            let scoreNumber = snake.score + 100
+            
+            score.text = "\(scoreNumber)"
         }
     }
     
@@ -54,8 +65,16 @@ class ViewController: UIViewController {
         if (timer != nil) {
             return
         }
+        
         startButton!.isHidden = true
-        snake.genFood(Image: food)
+        snake.direction = Direction.up
+        snake.length = 3
+        snake.score = 0
+        score.text = "0"
+        snake.spawn()
+
+            
+        snake.genFood(Image: food,start: foodStart)
         timer = Timer.scheduledTimer(timeInterval: snake.speed, target: self, selector: #selector(timerMethod(_:)) , userInfo: nil, repeats: true)
         
     }
@@ -84,10 +103,11 @@ class ViewController: UIViewController {
    
     @IBAction func startButton(_ sender: Any) {
         startGame()
-        snakeHead.center.x = 145
-        snakeHead.center.y = 222
+        
+        snakeHead.center.x = startPosition.center.x
+       snakeHead.center.y = startPosition.center.y
     }
-  
+    
    
     
     

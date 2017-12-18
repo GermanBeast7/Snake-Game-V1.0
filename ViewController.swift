@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     
  var timer:Timer?
     
-    var snake = Snake(speed: 0.25)
+    var snake = Snake(speed: 0.30)
     
    
  
@@ -54,10 +54,10 @@ class ViewController: UIViewController {
         
         let head = snake.bodyCoordinates[0]
         if head.x == snake.foodCordinate.x && head.y == snake.foodCordinate.y {
-            snake.genFood(Image: food,start: foodStart)
-            let scoreNumber = snake.score + 100
+             snake.foodAte(Image: food,start: foodStart)
+            //let scoreNumber = snake.score + 100
             
-            score.text = "\(scoreNumber)"
+            score.text = "\(snake.score), \(snake.length)"
         }
     }
     

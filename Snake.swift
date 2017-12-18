@@ -3,7 +3,7 @@
 //  Snake
 //
 //  Created by Matt T on 2017-12-07.
-//  Copyright © 2017 Matthew Temniuk. All rights reserved.
+//  Copyright © 2017 Matthew Temniuk, Hunter Heibein. All rights reserved.Not Jimmy Lu
 //
 
 import Foundation
@@ -104,7 +104,7 @@ class Snake{
         length+=1
         genFood(Image: Image, start:start)
         bodyCoordinates.insert(oldBodyCoords, at: bodyCoordinates.endIndex)
-        score+=100
+        score += 100
     }
     func genFood(Image: UIView,start: UIView){
         var x: Int = 0
@@ -114,8 +114,8 @@ class Snake{
         var canGen: Bool = false
         Image.isHidden = false
         while canGen != true   {
-            x = Int(arc4random_uniform(20))
-            y = Int(arc4random_uniform(20))
+            x = Int(arc4random_uniform(20)+1)
+            y = Int(arc4random_uniform(20)+1)
             for index in bodyCoordinates[0..<bodyCoordinates.count]    {
                 if x != index.x  &&  y != index.y {
                     canGen = true

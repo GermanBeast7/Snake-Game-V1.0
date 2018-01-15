@@ -3,7 +3,7 @@
 //  Snake
 //
 //  Created by Matt T on 2017-12-07.
-//  Copyright © 2017 Matthew Temniuk, Hunter Heibein. All rights reserved.Not Jimmy Lu
+//  Copyright © 2017 Matthew Temniuk, Hunter Heibein, Aaron Herschberger. All rights reserved.Not Jimmy Lu
 //
 
 import Foundation
@@ -20,7 +20,7 @@ enum Direction{
 class Snake{
     
     var isAlive:Bool = true
-    var length:UInt = 3
+    var length:UInt = 0
     var oldBodyCoords: Coordinates
     var direction = Direction.up
     var speed:Double
@@ -47,7 +47,7 @@ class Snake{
     }
    
     
-    func move(Image: UIView) {
+    func move(Image: UIView, Body1: UIView,start: UIView) {
         var headPoint = bodyCoordinates[0]
         if direction==Direction.up{
             
@@ -81,6 +81,11 @@ class Snake{
                 Image.center.x -= 32
             }, completion: nil)
         }
+        let startX = Int(start.center.x)
+        let startY = Int(start.center.y)
+        Body1.center.x = CGFloat(startX + 32 * (bodyCoordinates[Int(length)].x-1))
+        Body1.center.y = CGFloat(startY - 32 * (bodyCoordinates[Int(length)].y - 1))
+        
         oldBodyCoords = bodyCoordinates.removeLast()
         bodyCoordinates.insert(headPoint, at: 0)
         
@@ -93,17 +98,28 @@ class Snake{
 
         bodyCoordinates.removeAll()
         let cord1 = Coordinates(x: 7, y: 10)
-        let cord2 = Coordinates(x: 7, y: 9)
-        let cord3 = Coordinates(x: 7, y: 8)
         bodyCoordinates.insert(cord1, at: 0)
-        bodyCoordinates.insert(cord2, at: 1)
-        bodyCoordinates.insert(cord3, at: 2)
-        
     }
-    func foodAte(Image: UIView, start: UIView){
+    
+    func spawnImage(Image: UIView, length: Int, start: UIView){
+        let startX = Int(start.center.x)
+        let startY = Int(start.center.y)
+        Image.center.x = CGFloat(startX + 32 * (bodyCoordinates[Int(length)].x-1))
+        Image.center.y = CGFloat(startY - 32 * (bodyCoordinates[Int(length)].y - 1))
+    }
+    
+    func foodAte(Image: UIView, start: UIView, body: UIView){
+        let startX = Int(start.center.x)
+        let startY = Int(start.center.y)
+        
+        print("\(bodyCoordinates), and more....")
         length+=1
         genFood(Image: Image, start:start)
         bodyCoordinates.insert(oldBodyCoords, at: bodyCoordinates.endIndex)
+        let lastBodyX = oldBodyCoords.x
+        let lastBodyY = oldBodyCoords.y
+        body.center.x = CGFloat(startX + 32 * (lastBodyX-1) )
+        body.center.y = CGFloat(startY - 32 * (lastBodyY+1))
         score += 100
     }
     func genFood(Image: UIView,start: UIView){
@@ -178,7 +194,10 @@ class Snake{
 //        }
 //        return false
     }
-    
+    func returnImage(Image: UIView){
+        Image.center.x = 0
+        Image.center.y = 0
+    }
     func generateWallSnake(){
         var wallSnake = [Coordinates](repeating: Coordinates(x: 0, y: 0), count: 75)
         for z in 0...18{
